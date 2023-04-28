@@ -37,8 +37,10 @@ export async function query<T>(env: IEnv, query: string): Promise<{ data?: T[]; 
       method: 'POST',
     })
     const { data }: { data: T[] } = await res.json()
+
     return { data, success: true }
   } catch (e) {
+
     return { success: false }
   }
 }

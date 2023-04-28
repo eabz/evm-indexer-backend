@@ -2,6 +2,7 @@ import { Bool, Header, Num, OpenAPIRoute, Str } from '@cloudflare/itty-router-op
 
 import { apiSuccess } from '@/responses'
 import { IEnv } from '@/types'
+import { query, querySingle } from '@/db'
 
 export class Status extends OpenAPIRoute {
   static schema = {
@@ -29,6 +30,8 @@ export class Status extends OpenAPIRoute {
   }
 
   async handle(request: Request, env: IEnv, ctx: any, data: Record<string, any>) {
-    return apiSuccess({  })
+    const blocksIndexed = await query<{blocks: number, chain: number}>(env, "SELECT count(*) as indexed_blocks, chain FROM indexer.blocks GROUP BY chain");
+
+    return apiSuccess(blocksIndexed.data)
   }
 }
