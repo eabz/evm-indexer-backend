@@ -1,4 +1,4 @@
-import { Bool, Num, OpenAPIRoute, Str } from '@cloudflare/itty-router-openapi'
+import { Bool, OpenAPIRoute, Str } from '@cloudflare/itty-router-openapi'
 
 import { query } from '@/db'
 import { apiSuccess } from '@/responses'
@@ -11,8 +11,16 @@ export class Status extends OpenAPIRoute {
         schema: {
           data: [
             {
+              blocks: new Str(),
               chain: new Str(),
-              indexed_blocks: new Num(),
+              contracts: new Str(),
+              dex_trades: new Str(),
+              erc20_transfers: new Str(),
+              erc721_transfers: new Str(),
+              erc1155_transfers: new Str(),
+              logs: new Str(),
+              receipts: new Str(),
+              transactions: new Str(),
             },
           ],
           success: new Bool(),

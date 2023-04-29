@@ -55,18 +55,6 @@ module.exports = {
     ],
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
-    'no-restricted-imports': [
-      'error',
-      {
-        paths: [
-          {
-            message:
-              "To reduce bundle size, import only the required lodash function. Example: import get from 'lodash/get'",
-            name: 'lodash',
-          },
-        ],
-      },
-    ],
     'object-shorthand': ['error', 'always'],
     'simple-import-sort/exports': 'error',
     'simple-import-sort/imports': 'error',
