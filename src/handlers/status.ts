@@ -91,8 +91,12 @@ export class Status extends OpenAPIRoute {
         contracts: chainsContractsIndex ? contractsIndexed?.[chainsContractsIndex].contracts : 0,
         dex_trades: chainsDexTradesIndex ? dexTrades?.[chainsDexTradesIndex].dex_trades : 0,
         erc20_transfers: chainsErc20TransfersIndex ? erc20Transfers?.[chainsErc20TransfersIndex].erc20_transfers : 0,
-        erc721_transfers: chainsErc721TransfersIndex ? erc721Transfers?.[chainsErc721TransfersIndex].erc721_transfers : 0,
-        erc1155_transfers: chainsErc1155TransfersIndex ? erc1155Transfers?.[chainsErc1155TransfersIndex].erc1155_transfers : 0,
+        erc721_transfers: chainsErc721TransfersIndex
+          ? erc721Transfers?.[chainsErc721TransfersIndex].erc721_transfers
+          : 0,
+        erc1155_transfers: chainsErc1155TransfersIndex
+          ? erc1155Transfers?.[chainsErc1155TransfersIndex].erc1155_transfers
+          : 0,
         logs: chainsLogsIndex ? logsIndexed?.[chainsLogsIndex].logs : 0,
         receipts: chainsReceiptsIndex ? receiptsIndexed?.[chainsReceiptsIndex].receipts : 0,
         transactions: chainsTransactionsIndex ? transactionsIndexed?.[chainsTransactionsIndex].transactions : 0,
