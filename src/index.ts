@@ -2,9 +2,9 @@ import { OpenAPIRouter } from '@cloudflare/itty-router-openapi'
 import { createCors } from 'itty-cors'
 import { Toucan } from 'toucan-js'
 
+import { Status } from '@/handlers'
 import { apiError } from '@/responses'
 import { IEnv } from '@/types'
-import { Status } from '@/handlers'
 
 const { preflight } = createCors({
   maxAge: 3600,
