@@ -85,29 +85,34 @@ export class Status extends OpenAPIRoute {
     ])
 
     const fullChainData = blocksIndexed?.map((chainInfo) => {
-      const chainsTransactionsIndex = transactionsIndexed?.findIndex((items) => items.chain === chainInfo.chain)
-      const chainsContractsIndex = contractsIndexed?.findIndex((items) => items.chain === chainInfo.chain)
-      const chainsReceiptsIndex = receiptsIndexed?.findIndex((items) => items.chain === chainInfo.chain)
-      const chainsLogsIndex = logsIndexed?.findIndex((items) => items.chain === chainInfo.chain)
-      const chainsDexTradesIndex = dexTrades?.findIndex((items) => items.chain === chainInfo.chain)
-      const chainsErc20TransfersIndex = erc20Transfers?.findIndex((items) => items.chain === chainInfo.chain)
-      const chainsErc721TransfersIndex = erc721Transfers?.findIndex((items) => items.chain === chainInfo.chain)
-      const chainsErc1155TransfersIndex = erc1155Transfers?.findIndex((items) => items.chain === chainInfo.chain)
+      const chainTransactions = transactionsIndexed?.find((items) => items.chain === chainInfo.chain)?.transactions || 0
+
+      const chainContracts = contractsIndexed?.find((items) => items.chain === chainInfo.chain)?.contracts || 0
+
+      const chainReceipts = receiptsIndexed?.find((items) => items.chain === chainInfo.chain)?.receipts || 0
+
+      const chainLogs = logsIndexed?.find((items) => items.chain === chainInfo.chain)?.logs || 0
+
+      const chainDexTrades = dexTrades?.find((items) => items.chain === chainInfo.chain)?.dex_trades || 0
+
+      const chainErc20Transfers = erc20Transfers?.find((items) => items.chain === chainInfo.chain)?.erc20_transfers || 0
+
+      const chainErc721Transfers =
+        erc721Transfers?.find((items) => items.chain === chainInfo.chain)?.erc721_transfers || 0
+
+      const chainErc1155Transfers =
+        erc1155Transfers?.find((items) => items.chain === chainInfo.chain)?.erc1155_transfers || 0
 
       return {
         ...chainInfo,
-        contracts: chainsContractsIndex ? contractsIndexed?.[chainsContractsIndex].contracts : 0,
-        dex_trades: chainsDexTradesIndex ? dexTrades?.[chainsDexTradesIndex].dex_trades : 0,
-        erc20_transfers: chainsErc20TransfersIndex ? erc20Transfers?.[chainsErc20TransfersIndex].erc20_transfers : 0,
-        erc721_transfers: chainsErc721TransfersIndex
-          ? erc721Transfers?.[chainsErc721TransfersIndex].erc721_transfers
-          : 0,
-        erc1155_transfers: chainsErc1155TransfersIndex
-          ? erc1155Transfers?.[chainsErc1155TransfersIndex].erc1155_transfers
-          : 0,
-        logs: chainsLogsIndex ? logsIndexed?.[chainsLogsIndex].logs : 0,
-        receipts: chainsReceiptsIndex ? receiptsIndexed?.[chainsReceiptsIndex].receipts : 0,
-        transactions: chainsTransactionsIndex ? transactionsIndexed?.[chainsTransactionsIndex].transactions : 0,
+        contracts: chainContracts,
+        dex_trades: chainDexTrades,
+        erc20_transfers: chainErc20Transfers,
+        erc721_transfers: chainErc721Transfers,
+        erc1155_transfers: chainErc1155Transfers,
+        logs: chainLogs,
+        receipts: chainReceipts,
+        transactions: chainTransactions,
       }
     })
 
