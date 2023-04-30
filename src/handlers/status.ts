@@ -20,6 +20,7 @@ export class Status extends OpenAPIRoute {
               erc1155_transfers: new Str(),
               logs: new Str(),
               receipts: new Str(),
+              traces: new Str(),
               transactions: new Str(),
             },
           ],
@@ -48,6 +49,7 @@ export class Status extends OpenAPIRoute {
       { data: erc20Transfers },
       { data: erc721Transfers },
       { data: erc1155Transfers },
+      { data: tracesIndexed },
     ] = await Promise.all([
       query<{ blocks: number; chain: number }>(
         env,
@@ -82,6 +84,10 @@ export class Status extends OpenAPIRoute {
         env,
         'SELECT count(*) as erc1155_transfers, chain FROM indexer.erc1155_transfers GROUP BY chain',
       ),
+      query<{ chain: number; traces: number }>(
+        env,
+        'SELECT count(*) as traces, chain FROM indexer.traces GROUP BY chain',
+      ),
     ])
 
     const fullChainData = blocksIndexed?.map((chainInfo) => {
@@ -103,6 +109,8 @@ export class Status extends OpenAPIRoute {
       const chainErc1155Transfers =
         erc1155Transfers?.find((items) => items.chain === chainInfo.chain)?.erc1155_transfers || 0
 
+      const chainTraces = tracesIndexed?.find((items) => items.chain === chainInfo.chain)?.traces || 0
+
       return {
         ...chainInfo,
         contracts: chainContracts,
@@ -112,6 +120,7 @@ export class Status extends OpenAPIRoute {
         erc1155_transfers: chainErc1155Transfers,
         logs: chainLogs,
         receipts: chainReceipts,
+        traces: chainTraces,
         transactions: chainTransactions,
       }
     })
