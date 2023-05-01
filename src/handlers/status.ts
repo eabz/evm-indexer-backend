@@ -53,40 +53,40 @@ export class Status extends OpenAPIRoute {
     ] = await Promise.all([
       query<{ blocks: number; chain: number }>(
         env,
-        'SELECT count(*) as blocks, chain FROM indexer.blocks GROUP BY chain',
+        'SELECT * FROM indexer.blocks_count_by_chain FINAL',
       ),
       query<{ chain: number; transactions: number }>(
         env,
-        'SELECT count(*) as transactions, chain FROM indexer.transactions GROUP BY chain',
+        'SELECT * FROM indexer.transactions_count_by_chain FINAL',
       ),
       query<{ chain: number; contracts: number }>(
         env,
-        'SELECT count(*) as contracts, chain FROM indexer.contracts GROUP BY chain',
+        'SELECT * FROM indexer.contracts_count_by_chain FINAL',
       ),
       query<{ chain: number; receipts: number }>(
         env,
-        'SELECT count(*) as receipts, chain FROM indexer.receipts GROUP BY chain',
+        'SELECT * FROM indexer.receipts_count_by_chain FINAL',
       ),
-      query<{ chain: number; logs: number }>(env, 'SELECT count(*) as logs, chain FROM indexer.logs GROUP BY chain'),
+      query<{ chain: number; logs: number }>(env,'SELECT * FROM indexer.logs_count_by_chain FINAL'),
       query<{ chain: number; dex_trades: number }>(
         env,
-        'SELECT count(*) as dex_trades, chain FROM indexer.dex_trades GROUP BY chain',
+        'SELECT * FROM indexer.dex_trades_count_by_chain FINAL',
       ),
       query<{ chain: number; erc20_transfers: number }>(
         env,
-        'SELECT count(*) as erc20_transfers, chain FROM indexer.erc20_transfers GROUP BY chain',
+        'SELECT * FROM indexer.erc20_transfers_count_by_chain FINAL',
       ),
       query<{ chain: number; erc721_transfers: number }>(
         env,
-        'SELECT count(*) as erc721_transfers, chain FROM indexer.erc721_transfers GROUP BY chain',
+        'SELECT * FROM indexer.erc721_transfers_count_by_chain FINAL',
       ),
       query<{ chain: number; erc1155_transfers: number }>(
         env,
-        'SELECT count(*) as erc1155_transfers, chain FROM indexer.erc1155_transfers GROUP BY chain',
+        'SELECT * FROM indexer.erc1155_transfers_count_by_chain FINAL',
       ),
       query<{ chain: number; traces: number }>(
         env,
-        'SELECT count(*) as traces, chain FROM indexer.traces GROUP BY chain',
+        'SELECT * FROM indexer.traces_count_by_chain FINAL',
       ),
     ])
 
