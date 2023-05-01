@@ -51,27 +51,12 @@ export class Status extends OpenAPIRoute {
       { data: erc1155Transfers },
       { data: tracesIndexed },
     ] = await Promise.all([
-      query<{ blocks: number; chain: number }>(
-        env,
-        'SELECT * FROM indexer.blocks_count_by_chain FINAL',
-      ),
-      query<{ chain: number; transactions: number }>(
-        env,
-        'SELECT * FROM indexer.transactions_count_by_chain FINAL',
-      ),
-      query<{ chain: number; contracts: number }>(
-        env,
-        'SELECT * FROM indexer.contracts_count_by_chain FINAL',
-      ),
-      query<{ chain: number; receipts: number }>(
-        env,
-        'SELECT * FROM indexer.receipts_count_by_chain FINAL',
-      ),
-      query<{ chain: number; logs: number }>(env,'SELECT * FROM indexer.logs_count_by_chain FINAL'),
-      query<{ chain: number; dex_trades: number }>(
-        env,
-        'SELECT * FROM indexer.dex_trades_count_by_chain FINAL',
-      ),
+      query<{ blocks: number; chain: number }>(env, 'SELECT * FROM indexer.blocks_count_by_chain FINAL ORDER BY chain'),
+      query<{ chain: number; transactions: number }>(env, 'SELECT * FROM indexer.transactions_count_by_chain FINAL'),
+      query<{ chain: number; contracts: number }>(env, 'SELECT * FROM indexer.contracts_count_by_chain FINAL'),
+      query<{ chain: number; receipts: number }>(env, 'SELECT * FROM indexer.receipts_count_by_chain FINAL'),
+      query<{ chain: number; logs: number }>(env, 'SELECT * FROM indexer.logs_count_by_chain FINAL'),
+      query<{ chain: number; dex_trades: number }>(env, 'SELECT * FROM indexer.dex_trades_count_by_chain FINAL'),
       query<{ chain: number; erc20_transfers: number }>(
         env,
         'SELECT * FROM indexer.erc20_transfers_count_by_chain FINAL',
@@ -84,10 +69,7 @@ export class Status extends OpenAPIRoute {
         env,
         'SELECT * FROM indexer.erc1155_transfers_count_by_chain FINAL',
       ),
-      query<{ chain: number; traces: number }>(
-        env,
-        'SELECT * FROM indexer.traces_count_by_chain FINAL',
-      ),
+      query<{ chain: number; traces: number }>(env, 'SELECT * FROM indexer.traces_count_by_chain FINAL'),
     ])
 
     const fullChainData = blocksIndexed?.map((chainInfo) => {
