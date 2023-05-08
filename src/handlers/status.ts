@@ -22,6 +22,7 @@ export class Status extends OpenAPIRoute {
               receipts: new Str(),
               traces: new Str(),
               transactions: new Str(),
+              withdrawals: new Str(),
             },
           ],
           success: new Bool(),
@@ -50,20 +51,52 @@ export class Status extends OpenAPIRoute {
       { data: erc721Transfers },
       { data: erc1155Transfers },
       { data: tracesIndexed },
+      { data: withdrawalsIndexed },
     ] = await Promise.all([
-      query<{ blocks: number; chain: number }>(env, 'SELECT * FROM indexer.blocks_count_by_chain ORDER BY chain'),
-      query<{ chain: number; transactions: number }>(env, 'SELECT * FROM indexer.transactions_count_by_chain'),
-      query<{ chain: number; contracts: number }>(env, 'SELECT * FROM indexer.contracts_count_by_chain'),
-      query<{ chain: number; receipts: number }>(env, 'SELECT * FROM indexer.receipts_count_by_chain'),
-      query<{ chain: number; logs: number }>(env, 'SELECT * FROM indexer.logs_count_by_chain'),
-      query<{ chain: number; dex_trades: number }>(env, 'SELECT * FROM indexer.dex_trades_count_by_chain'),
-      query<{ chain: number; erc20_transfers: number }>(env, 'SELECT * FROM indexer.erc20_transfers_count_by_chain'),
-      query<{ chain: number; erc721_transfers: number }>(env, 'SELECT * FROM indexer.erc721_transfers_count_by_chain'),
+      query<{ blocks: number; chain: number }>(
+        env,
+        'SELECT sum(blocks) as blocks, chain FROM indexer.blocks_count_by_chain GROUP BY chain',
+      ),
+      query<{ chain: number; transactions: number }>(
+        env,
+        'SELECT sum(transactions) as transactions, chain FROM indexer.transactions_count_by_chain GROUP BY chain',
+      ),
+      query<{ chain: number; contracts: number }>(
+        env,
+        'SELECT sum(contracts) as contracts, chain FROM indexer.contracts_count_by_chain GROUP BY chain',
+      ),
+      query<{ chain: number; receipts: number }>(
+        env,
+        'SELECT sum(receipts) as receipts, chain FROM indexer.receipts_count_by_chain GROUP BY chain',
+      ),
+      query<{ chain: number; logs: number }>(
+        env,
+        'SELECT sum(logs) as logs, chain FROM indexer.logs_count_by_chain GROUP BY chain',
+      ),
+      query<{ chain: number; dex_trades: number }>(
+        env,
+        'SELECT sum(dex_trades) as dex_trades, chain FROM indexer.dex_trades_count_by_chain GROUP BY chain',
+      ),
+      query<{ chain: number; erc20_transfers: number }>(
+        env,
+        'SELECT sum(erc20_transfers) as erc20_transfers, chain FROM indexer.erc20_transfers_count_by_chain GROUP BY chain',
+      ),
+      query<{ chain: number; erc721_transfers: number }>(
+        env,
+        'SELECT sum(erc721_transfers) as erc721_transfers, chain FROM indexer.erc721_transfers_count_by_chain GROUP BY chain',
+      ),
       query<{ chain: number; erc1155_transfers: number }>(
         env,
-        'SELECT * FROM indexer.erc1155_transfers_count_by_chain',
+        'SELECT sum(erc1155_transfers) as erc1155_transfers, chain FROM indexer.erc1155_transfers_count_by_chain GROUP BY chain',
       ),
-      query<{ chain: number; traces: number }>(env, 'SELECT * FROM indexer.traces_count_by_chain'),
+      query<{ chain: number; traces: number }>(
+        env,
+        'SELECT sum(traces) as traces, chain FROM indexer.traces_count_by_chain GROUP BY chain',
+      ),
+      query<{ chain: number; withdrawals: number }>(
+        env,
+        'SELECT sum(withdrawals) as withdrawals, chain FROM indexer.withdrawals_count_by_chain GROUP BY chain',
+      ),
     ])
 
     const fullChainData = blocksIndexed?.map((chainInfo) => {
@@ -87,6 +120,8 @@ export class Status extends OpenAPIRoute {
 
       const chainTraces = tracesIndexed?.find((items) => items.chain === chainInfo.chain)?.traces || 0
 
+      const chainWithdrawals = withdrawalsIndexed?.find((items) => items.chain === chainInfo.chain)?.withdrawals || 0
+
       return {
         ...chainInfo,
         contracts: chainContracts,
@@ -98,6 +133,7 @@ export class Status extends OpenAPIRoute {
         receipts: chainReceipts,
         traces: chainTraces,
         transactions: chainTransactions,
+        withdrawals: chainWithdrawals,
       }
     })
 
