@@ -55,47 +55,44 @@ export class Status extends OpenAPIRoute {
     ] = await Promise.all([
       query<{ blocks: number; chain: number }>(
         env,
-        'SELECT sum(blocks) as blocks, chain FROM indexer.blocks_count_by_chain GROUP BY chain',
+        'SELECT count(*) as blocks, chain FROM indexer.blocks GROUP BY chain',
       ),
       query<{ chain: number; transactions: number }>(
         env,
-        'SELECT sum(transactions) as transactions, chain FROM indexer.transactions_count_by_chain GROUP BY chain',
+        'SELECT count(*) as transactions, chain FROM indexer.transactions GROUP BY chain',
       ),
       query<{ chain: number; contracts: number }>(
         env,
-        'SELECT sum(contracts) as contracts, chain FROM indexer.contracts_count_by_chain GROUP BY chain',
+        'SELECT count(*) as contracts, chain FROM indexer.contracts GROUP BY chain',
       ),
       query<{ chain: number; receipts: number }>(
         env,
-        'SELECT sum(receipts) as receipts, chain FROM indexer.receipts_count_by_chain GROUP BY chain',
+        'SELECT count(*) as receipts, chain FROM indexer.receipts GROUP BY chain',
       ),
-      query<{ chain: number; logs: number }>(
-        env,
-        'SELECT sum(logs) as logs, chain FROM indexer.logs_count_by_chain GROUP BY chain',
-      ),
+      query<{ chain: number; logs: number }>(env, 'SELECT count(*) as logs, chain FROM indexer.logs GROUP BY chain'),
       query<{ chain: number; dex_trades: number }>(
         env,
-        'SELECT sum(dex_trades) as dex_trades, chain FROM indexer.dex_trades_count_by_chain GROUP BY chain',
+        'SELECT count(*) as dex_trades, chain FROM indexer.dex_trades GROUP BY chain',
       ),
       query<{ chain: number; erc20_transfers: number }>(
         env,
-        'SELECT sum(erc20_transfers) as erc20_transfers, chain FROM indexer.erc20_transfers_count_by_chain GROUP BY chain',
+        'SELECT count(*) as erc20_transfers, chain FROM indexer.erc20_transfers GROUP BY chain',
       ),
       query<{ chain: number; erc721_transfers: number }>(
         env,
-        'SELECT sum(erc721_transfers) as erc721_transfers, chain FROM indexer.erc721_transfers_count_by_chain GROUP BY chain',
+        'SELECT count(*) as erc721_transfers, chain FROM indexer.erc721_transfers GROUP BY chain',
       ),
       query<{ chain: number; erc1155_transfers: number }>(
         env,
-        'SELECT sum(erc1155_transfers) as erc1155_transfers, chain FROM indexer.erc1155_transfers_count_by_chain GROUP BY chain',
+        'SELECT count(*) as erc1155_transfers, chain FROM indexer.erc1155_transfers GROUP BY chain',
       ),
       query<{ chain: number; traces: number }>(
         env,
-        'SELECT sum(traces) as traces, chain FROM indexer.traces_count_by_chain GROUP BY chain',
+        'SELECT count(*) as traces, chain FROM indexer.traces GROUP BY chain',
       ),
       query<{ chain: number; withdrawals: number }>(
         env,
-        'SELECT sum(withdrawals) as withdrawals, chain FROM indexer.withdrawals_count_by_chain GROUP BY chain',
+        'SELECT count(*) as withdrawals, chain FROM indexer.withdrawals GROUP BY chain',
       ),
     ])
 
