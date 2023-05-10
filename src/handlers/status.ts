@@ -45,7 +45,7 @@ export class Status extends OpenAPIRoute {
     ] = await Promise.all([
       query<{ blocks: number; chain: number }>(
         env,
-        'SELECT count(*) as blocks, chain FROM indexer.blocks GROUP BY chain',
+        'SELECT count(*) as blocks, chain FROM indexer.blocks WHERE is_uncle = false GROUP BY chain',
       ),
       query<{ chain: number; transactions: number }>(
         env,
