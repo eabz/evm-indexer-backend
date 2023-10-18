@@ -1,6 +1,5 @@
 import { OpenAPIRouter } from '@cloudflare/itty-router-openapi'
 import { createCors } from 'itty-cors'
-import { Toucan } from 'toucan-js'
 
 import { Status } from '@/handlers'
 import { apiError } from '@/responses'
@@ -24,7 +23,7 @@ const router = OpenAPIRouter({
 
 router.all('*', preflight)
 
-router.original.get('/', (request) => Response.redirect(`${request.url}docs`, 302))
+router.original.get('/', (request: { url: any }) => Response.redirect(`${request.url}docs`, 302))
 
 router.get('/status', Status)
 
@@ -32,19 +31,11 @@ router.all('*', () => new Response('Not Found.', { status: 404 }))
 
 export default {
   fetch: async (request: Request, env: IEnv, ctx: ExecutionContext): Promise<Response> => {
-    const sentry = new Toucan({
-      context: ctx,
-      dsn: env.SENTRY_DSN,
-      request,
-    })
-
     try {
       const res = await router.handle(request, env, ctx)
 
       return res
     } catch (e) {
-      sentry.captureException(e)
-
       return apiError('internal server error', 500)
     }
   },

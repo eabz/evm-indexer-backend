@@ -40,6 +40,7 @@ export async function query<T>(env: IEnv, query: string): Promise<{ data?: T[]; 
 
     return { data, success: true }
   } catch (e) {
+    console.log(e)
     return { success: false }
   }
 }
